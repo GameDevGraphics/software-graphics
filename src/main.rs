@@ -25,7 +25,7 @@ fn inside_triangle(a: &Vec2, b: &Vec2, c: &Vec2, p: &Vec2) -> bool {
     overlaps
 }
 
-fn draw_triangle(framebuffer: &mut Framebuffer, a: &Vec2, b: &Vec2, c: &Vec2) {
+fn draw_triangle(framebuffer: &mut Framebuffer, a: &Vec2, b: &Vec2, c: &Vec2, color: u32) {
     let width = framebuffer.width();
     let height = framebuffer.height();
 
@@ -41,14 +41,28 @@ fn draw_triangle(framebuffer: &mut Framebuffer, a: &Vec2, b: &Vec2, c: &Vec2) {
             
             let inside = inside_triangle(a, b, c, &p);
             if inside {
-                framebuffer.set_pixel(x, y, from_u8_rgb(255, 100, 50));
+                framebuffer.set_pixel(x, y, color);
             }
         }
     }
 }
 
+static POINTS: &[Vec2] = &[
+    Vec2::new(0.3, 0.3),
+    Vec2::new(0.7, 0.3),
+    Vec2::new(0.5, 0.7),
+
+    Vec2::new(0.1, 0.3),
+    Vec2::new(0.5, 0.1),
+    Vec2::new(0.2, 0.6),
+
+    Vec2::new(0.5, 0.7),
+    Vec2::new(0.9, 0.7),
+    Vec2::new(0.5, 0.9),
+];
+
 fn main() {
-    let mut window = Window::new("3D graphics from scratch!", 512, 512);
+    let mut window = Window::new("3D graphics from scratch!", 256, 256);
 
     let point_a = Vec2::new(0.3, 0.3);
     let point_b = Vec2::new(0.7, 0.3);
@@ -59,7 +73,17 @@ fn main() {
 
         framebuffer.clear(from_u8_rgb(20, 20, 20));
 
-        draw_triangle(framebuffer, &point_a, &point_b, &point_c);
+        //draw_triangle(framebuffer, &point_a, &point_b, &point_c);
+
+        for i in 0..(POINTS.len() / 3) {
+            draw_triangle(
+                framebuffer,
+                &POINTS[i * 3],
+                &POINTS[i * 3 + 1],
+                &POINTS[i * 3 + 2],
+                from_u8_rgb((i * 100 + 100) as u8, 100, 50)
+            );
+        }
 
         window.display();
     }
