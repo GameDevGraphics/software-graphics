@@ -62,7 +62,7 @@ static POINTS: &[Vec2] = &[
 ];
 
 fn main() {
-    let mut window = Window::new("3D graphics from scratch!", 256, 256);
+    let mut window = Window::new("3D graphics from scratch! (PART 1)", 256, 256);
 
     while !window.should_close() {
         let framebuffer = window.framebuffer();

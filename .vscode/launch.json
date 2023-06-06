@@ -5,7 +5,7 @@
             "name": "Debug",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/target/debug/software-graphics.exe",
+            "program": "${workspaceFolder}/target/debug/part2.exe",
             "args": [
             ],
             "cwd": "${workspaceFolder}",
@@ -15,7 +15,7 @@
             "name": "Release",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/target/release/software-graphics.exe",
+            "program": "${workspaceFolder}/target/release/part2.exe",
             "args": [
             ],
             "cwd": "${workspaceFolder}",
