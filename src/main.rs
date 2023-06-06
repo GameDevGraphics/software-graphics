@@ -64,16 +64,10 @@ static POINTS: &[Vec2] = &[
 fn main() {
     let mut window = Window::new("3D graphics from scratch!", 256, 256);
 
-    let point_a = Vec2::new(0.3, 0.3);
-    let point_b = Vec2::new(0.7, 0.3);
-    let point_c = Vec2::new(0.5, 0.7);
-
     while !window.should_close() {
         let framebuffer = window.framebuffer();
 
         framebuffer.clear(from_u8_rgb(20, 20, 20));
-
-        //draw_triangle(framebuffer, &point_a, &point_b, &point_c);
 
         for i in 0..(POINTS.len() / 3) {
             draw_triangle(
