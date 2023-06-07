@@ -131,7 +131,7 @@ fn main() {
 
         let aspect_ratio = framebuffer.width() as f32 / framebuffer.height() as f32;
         let model_matrix = Mat4::from_axis_angle(Vec3::new(0.0, 1.0, 0.0), timer.elapsed().unwrap().as_secs_f32()) * Mat4::from_axis_angle(Vec3::new(1.0, 0.0, 0.0), (90.0f32).to_radians());
-        let view_matrix = Mat4::from_translation(Vec3::new(0.0, 0.0, -5.0));
+        let view_matrix = Mat4::from_translation(Vec3::new(0.0, 0.0, -3.5));
         let proj_matrix = Mat4::perspective_rh((60.0f32).to_radians(), aspect_ratio, 0.01, 300.0);
         let mvp_matrix = proj_matrix * view_matrix * model_matrix;
         let inv_trans_model_matrix = model_matrix.inverse().transpose();
