@@ -2,7 +2,17 @@ use glam::*;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Vertex {
-    pub position: Vec3
+    pub position: Vec3,
+    pub normal: Vec3
+}
+
+impl Default for Vertex {
+    fn default() -> Self {
+        Vertex {
+            position: Vec3::ZERO,
+            normal: Vec3::ZERO
+        }
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -77,13 +87,20 @@ fn process_node(
                     iter.map(|arr| -> Vec3 { Vec3::from(arr) }).collect::<Vec<_>>()
                 };
 
-                let vertices: Vec<Vertex> = positions
+                let mut vertices: Vec<Vertex> = positions
                     .into_iter()
                     .map(|position| {
                         Vertex {
-                             position
+                             position,
+                             ..Default::default()
                         }
                 }).collect();
+
+                if let Some(normals) = reader.read_normals() {
+                    for (i, normal) in normals.enumerate() {
+                        vertices[i].normal = Vec3::from(normal);
+                    }
+                }
 
                 let indices = reader
                     .read_indices()
