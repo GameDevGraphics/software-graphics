@@ -24,7 +24,6 @@ impl Window {
         ).expect("Failed to create window.");
 
         let framebuffer = Framebuffer::new(width, height);
-        let depth_buffer = Framebuffer::new(width, height);
 
         Window {
             window,

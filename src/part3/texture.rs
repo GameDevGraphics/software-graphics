@@ -1,5 +1,4 @@
 use glam::*;
-use stb_image::stb_image::bindgen::*;
 use std::ffi::CString;
 
 #[derive(Clone, Debug)]
