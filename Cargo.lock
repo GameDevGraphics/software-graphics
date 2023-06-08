@@ -681,6 +681,17 @@ dependencies = [
  "glam",
  "gltf",
  "minifb",
+ "stb_image",
+]
+
+[[package]]
+name = "stb_image"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e865fe63d814d367599a0198cb95049f7e81ea4fd5c6b302c825278a2b43c064"
+dependencies = [
+ "cc",
+ "libc",
 ]
 
 [[package]]

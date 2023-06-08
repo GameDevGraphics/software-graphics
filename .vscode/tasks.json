@@ -19,7 +19,7 @@
             "type": "cargo",
             "command": "build",
             "args": [
-                "--bin", "part2"
+                "--bin", "part3"
             ],
             "problemMatcher": [
                 "$rustc"
@@ -33,7 +33,7 @@
             "type": "cargo",
             "command": "build",
             "args": [
-                "--bin", "part2",
+                "--bin", "part3",
                 "--release"
             ],
             "problemMatcher": [

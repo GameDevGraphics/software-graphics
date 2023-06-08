@@ -5,11 +5,17 @@ use glam::*;
 mod window;
 use window::{Window, Framebuffer};
 mod model;
-use model::{Model, Vertex, load_model};
+use model::{Model, Vertex, Material, load_model};
+mod texture;
+use texture::{Texture, load_texture};
 
 fn from_u8_rgb(r: u8, g: u8, b: u8) -> u32 {
     let (r, g, b) = (r as u32, g as u32, b as u32);
     (r << 16) | (g << 8) | b
+}
+
+fn from_vec3_rgb(rgb: &Vec3) -> u32 {
+    from_u8_rgb((rgb.x * 255.99) as u8, (rgb.y * 255.99) as u8, (rgb.z * 255.99) as u8)
 }
 
 fn edge_function(a: &Vec2, c: &Vec2, b: &Vec2) -> f32 {
@@ -21,7 +27,8 @@ fn draw_triangle(
     depth_buffer: &mut Framebuffer,
     v0: &Vertex, v1: &Vertex, v2: &Vertex,
     mvp: &Mat4,
-    inv_trans_model_matrix: &Mat4
+    inv_trans_model_matrix: &Mat4,
+    material: &Material
 ) {
     let v0_clip_space = project(&v0.position, mvp);
     let v1_clip_space = project(&v1.position, mvp);
@@ -66,10 +73,22 @@ fn draw_triangle(
                                         + n1 * v1_clip_space.1 * bary_coords.y
                                         + n2 * v2_clip_space.1 * bary_coords.z).xyz()
                                             * correction).normalize();
+                    
+                    let tex_coord = (v0.tex_coord * v0_clip_space.1 * bary_coords.x
+                                            + v1.tex_coord * v1_clip_space.1 * bary_coords.y
+                                            + v2.tex_coord * v2_clip_space.1 * bary_coords.z) * correction;
 
-                    let normal_as_color = (normal * 0.5 + 0.5) * 255.99;
+                    let mut base_color = material.base_color;
+                    if let Some(base_color_texture) = &material.base_color_texture {
+                        base_color *= base_color_texture.sample_pixel(tex_coord.x, tex_coord.y);
+                    }
 
-                    framebuffer.set_pixel(x, y, from_u8_rgb(normal_as_color.x as u8, normal_as_color.y as u8, normal_as_color.z as u8));
+                    let light_dir = Vec3::new(0.3, -0.8, -0.4).normalize();
+                    let light_intensity = normal.dot(-light_dir);
+
+                    let final_color = base_color * light_intensity;
+
+                    framebuffer.set_pixel(x, y, from_vec3_rgb(&final_color.xyz()));
                 }
             }
         }
@@ -100,19 +119,22 @@ fn draw_model(
             let v1 = mesh.vertices[mesh.indices[i * 3 + 1] as usize];
             let v2 = mesh.vertices[mesh.indices[i * 3 + 2] as usize];
 
+            let material = &model.materials[mesh.material_idx];
+
             draw_triangle(
                 framebuffer,
                 depth_buffer,
                 &v0, &v1, &v2,
                 mvp,
-                inv_trans_model_matrix
+                inv_trans_model_matrix,
+                material
             );
         }
     }
 }
 
 fn main() {
-    let mut window = Window::new("3D graphics from scratch! (PART 2)", 512, 512);
+    let mut window = Window::new("3D graphics from scratch! (PART 3)", 512, 512);
     let mut depth_buffer = Framebuffer::new(window.framebuffer().width(), window.framebuffer().height());
 
     let model = load_model("assets/DamagedHelmet/DamagedHelmet.gltf");

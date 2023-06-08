@@ -7,6 +7,7 @@ edition = "2021"
 minifb = "0.24.0"
 glam = "0.23.0"
 gltf = "1.0.0"
+stb_image = "0.2.4"
 
 [[bin]]
 name = "part1"
@@ -15,3 +16,7 @@ path = "src/part1/main.rs"
 [[bin]]
 name = "part2"
 path = "src/part2/main.rs"
+
+[[bin]]
+name = "part3"
+path = "src/part3/main.rs"
